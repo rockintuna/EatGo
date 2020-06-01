@@ -2,6 +2,7 @@ package kr.co.fastcampus.eatgo.interfaces;
 
 import kr.co.fastcampus.eatgo.domain.Restaurant;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,8 @@ import java.util.List;
 @RestController //Rest API 를 사용하는 컨트롤러 임을 명시
 public class RestaurantController {
 
-    private RestaurantRepository repository = new RestaurantRepository(); //저장소 객체 선언
+    @Autowired //Spring이 알아서 객체를 생성해서 멤버변수에 넣어준다.
+    private RestaurantRepository repository;
 
     //UI 레이어는 사용자와 내부의 비즈니스 로직, 도메인 모델()들이 상관 없도록 중간 다리 역할만 하는 것이 좋다
 
