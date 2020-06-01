@@ -1,60 +1,72 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
 import kr.co.fastcampus.eatgo.application.RestaurantService;
-import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
-import kr.co.fastcampus.eatgo.domain.MenuItemRepositoryImpl;
-import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
-import kr.co.fastcampus.eatgo.domain.RestaurantRepositoryImpl;
+import kr.co.fastcampus.eatgo.domain.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class) //spring을 이용하여 테스트 실행
-@WebMvcTest(RestaurantController.class) //특정 컨트롤러를 테스트한다고 명시
+@RunWith(SpringRunner.class)
+@WebMvcTest(RestaurantController.class)
 public class RestaurantControllerTest {
 
-    @Autowired //spring에서 알아서 넣어줄 수 있도록
+    @Autowired
     private MockMvc mvc;
 
-    @SpyBean(RestaurantService.class)
+    //Test하려는 대상은 RestaurantController 이므로 그 외의 대상을 가짜로 배치하려고 함
+    @MockBean
     private RestaurantService restaurantService;
-
-    @SpyBean(RestaurantRepositoryImpl.class) //어떤 구현체를 사용할 것인지 입력해줘야 한다
-    private RestaurantRepository restaurantRepository;
-
-    @SpyBean(MenuItemRepositoryImpl.class)
-    private MenuItemRepository menuItemRepository;
 
     @Test
     public void list() throws Exception {
+
+        //가짜 객체 생성, 가짜 처리
+        //실제 서비스, 저장소와는 무관하게 동작
+        List<Restaurant> restaurants = new ArrayList<>();
+        restaurants.add(new Restaurant(1004L,"No Bob zip","Seoul"));
+        given(restaurantService.getRestaurants()).willReturn(restaurants);
+
         mvc.perform(MockMvcRequestBuilders.get("/restaurants"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1004")
                 ))
                 .andExpect(content().string(
-                        containsString("\"name\":\"Bob zip\"")
+                        containsString("\"name\":\"No Bob zip\"")
                 ));
     }
 
     @Test
     public void detail() throws Exception {
+        Restaurant restaurant1 = new Restaurant(1004L,"No Bob zip","Seoul");
+        restaurant1.addMenuItem(new MenuItem("Kimchi"));
+        given(restaurantService.getRestaurant(1004L)).willReturn(restaurant1);
+
+        Restaurant restaurant2 = new Restaurant(2020L,"Cyber Food","Seoul");
+        restaurant2.addMenuItem(new MenuItem("Kimchi"));
+        given(restaurantService.getRestaurant(2020L)).willReturn(restaurant2);
+
         mvc.perform(MockMvcRequestBuilders.get("/restaurants/1004"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1004")
                 ))
                 .andExpect(content().string(
-                        containsString("\"name\":\"Bob zip\"")
+                        containsString("\"name\":\"No Bob zip\"")
                 ))
                 .andExpect(content().string(
                         containsString("Kimchi")
