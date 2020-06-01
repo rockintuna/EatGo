@@ -1,5 +1,8 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
+import kr.co.fastcampus.eatgo.application.RestaurantService;
+import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
+import kr.co.fastcampus.eatgo.domain.MenuItemRepositoryImpl;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
 import kr.co.fastcampus.eatgo.domain.RestaurantRepositoryImpl;
 import org.junit.Test;
@@ -22,8 +25,14 @@ public class RestaurantControllerTest {
     @Autowired //spring에서 알아서 넣어줄 수 있도록
     private MockMvc mvc;
 
+    @SpyBean(RestaurantService.class)
+    private RestaurantService restaurantService;
+
     @SpyBean(RestaurantRepositoryImpl.class) //어떤 구현체를 사용할 것인지 입력해줘야 한다
     private RestaurantRepository restaurantRepository;
+
+    @SpyBean(MenuItemRepositoryImpl.class)
+    private MenuItemRepository menuItemRepository;
 
     @Test
     public void list() throws Exception {
@@ -46,7 +55,11 @@ public class RestaurantControllerTest {
                 ))
                 .andExpect(content().string(
                         containsString("\"name\":\"Bob zip\"")
+                ))
+                .andExpect(content().string(
+                        containsString("Kimchi")
                 ));
+
         mvc.perform(MockMvcRequestBuilders.get("/restaurants/2020"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
