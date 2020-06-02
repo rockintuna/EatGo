@@ -1,18 +1,19 @@
 package kr.co.fastcampus.eatgo.application;
 
-import kr.co.fastcampus.eatgo.domain.*;
-import org.hamcrest.core.IsNull;
+import kr.co.fastcampus.eatgo.domain.MenuItem;
+import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
+import kr.co.fastcampus.eatgo.domain.Restaurant;
+import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -20,14 +21,14 @@ public class RestaurantServiceTest {
 
     private RestaurantService restaurantService;
 
-    @Mock //저장소를 가짜로 주입
+    @Mock
     private RestaurantRepository restaurantRepository;
     @Mock
     private MenuItemRepository menuItemRepository;
 
-    @Before //모든 Test가 실행되기 전에 수행 됨
+    @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this); //현재 Class의 Mock annotation이 붙어있는 곳에 객체 설정
+        MockitoAnnotations.initMocks(this);
 
         mockRestaurantRepository();
         mockMenuItemRepository();
@@ -43,12 +44,12 @@ public class RestaurantServiceTest {
 
         given(restaurantRepository.findAll()).willReturn(restaurants);
 
-        given(restaurantRepository.findById(1004L)).willReturn(restaurant);
+        given(restaurantRepository.findById(1004L)).willReturn(java.util.Optional.of(restaurant));
 
     }
 
     private void mockMenuItemRepository() {
-        //가짜 Menu Item 생
+        //가짜 Menu Item 생성
         List<MenuItem> menuItems = new ArrayList<>();
         MenuItem menuItem = new MenuItem("Kimchi");
         menuItems.add(menuItem);
