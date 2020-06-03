@@ -1,5 +1,7 @@
 package kr.co.fastcampus.eatgo.domain;
 
+import lombok.*;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,61 +10,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter //모든 속성들에 대한 getter 가 알아서 만들어 진다
+@NoArgsConstructor //디폴트 생성자
+@AllArgsConstructor //모든 속성을 사용하는 생성자
+@Builder //Builder 패턴을 사용
 public class Restaurant {
-    private String name;
-    private String address;
     @Id
+    @Setter
     @GeneratedValue
     private Long id;
+    @Setter //name에 대한 setter 가 알아서 만들어 진다
+    private String name;
+    private String address;
 
     @Transient //통과ll
-    private List<MenuItem> menuItems = new ArrayList<MenuItem>();
-
-    public Restaurant() {
-    }
-
-    public Restaurant(String name, String address) {
-        this.name = name;
-        this.address = address;
-    }
-
-    public Restaurant(Long id, String name, String address) {
-        this.id = id;
-        this.name = name;
-        this.address = address;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
-    }
+    private List<MenuItem> menuItems;
 
     public String getInformation() {
         return name+" in "+address;
     }
 
-    public void addMenuItem(MenuItem menuItem) {
-        menuItems.add(menuItem);
+    public void setMenuItems(List<MenuItem> menuItems) {
+        this.menuItems = new ArrayList<MenuItem>(menuItems);
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
-        for (MenuItem menuItem : menuItems) {
-            addMenuItem(menuItem);
-        }
+    public void setInformation(String name, String address) {
+        this.name = name;
+        this.address = address;
     }
 }

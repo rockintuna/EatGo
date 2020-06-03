@@ -9,7 +9,12 @@ public class RestaurantTests {
 
     @Test
     public void creation() {
-        Restaurant restaurant = new Restaurant(1004L,"Bob zip","Seoul");
+        Restaurant restaurant = Restaurant.builder() //@Builder 패턴을 사용, 가독이 좋고 순서가 없다는 장점
+                .id(1004L)
+                .name("Bob zip")
+                .address("Seoul")
+                .build();
+
         assertThat(restaurant.getId(), is(1004L));
         assertThat(restaurant.getName(), is("Bob zip"));
         assertThat(restaurant.getAddress(), is("Seoul"));
@@ -17,7 +22,11 @@ public class RestaurantTests {
 
     @Test
     public void information() {
-        Restaurant restaurant = new Restaurant(1004L, "Bob zip","Seoul");
+        Restaurant restaurant = Restaurant.builder()
+                .id(1004L)
+                .name("Bob zip")
+                .address("Seoul")
+                .build();
         assertThat(restaurant.getInformation(), is("Bob zip in Seoul"));
     }
 }
