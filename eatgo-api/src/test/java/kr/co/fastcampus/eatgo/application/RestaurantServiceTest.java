@@ -1,9 +1,6 @@
 package kr.co.fastcampus.eatgo.application;
 
-import kr.co.fastcampus.eatgo.domain.MenuItem;
-import kr.co.fastcampus.eatgo.domain.MenuItemRepository;
-import kr.co.fastcampus.eatgo.domain.Restaurant;
-import kr.co.fastcampus.eatgo.domain.RestaurantRepository;
+import kr.co.fastcampus.eatgo.domain.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -75,13 +72,19 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void getRestaurant() {
+    public void getRestaurantWithExist() {
 
         Restaurant restaurant = restaurantService.getRestaurant(1004L);
         assertThat(restaurant.getId(), is(1004L));
 
         MenuItem menuItem = restaurant.getMenuItems().get(0);
         assertThat(menuItem.getName(), is("Kimchi"));
+    }
+
+    @Test(expected = RestaurantNotFoundException.class) //요청만해도 예외가 발생하길 원한다.
+    public void getRestaurantWithNotExist() {
+
+        Restaurant restaurant = restaurantService.getRestaurant(404L);
     }
 
     @Test
@@ -104,7 +107,7 @@ public class RestaurantServiceTest {
     }
 
     @Test
-    public void updateRestaurant() {
+    public void updateRestaurantWithExist() {
 
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
@@ -117,5 +120,11 @@ public class RestaurantServiceTest {
 
         assertThat(restaurant.getName(), is("GukBobZip"));
         assertThat(restaurant.getAddress(), is("Busan"));
+    }
+
+    @Test(expected = RestaurantNotFoundException.class)
+    public void updateRestaurantWithNotExist() {
+
+        restaurantService.updateRestaurant(404L,"GukBobZip","Busan");
     }
 }

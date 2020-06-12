@@ -1,11 +1,13 @@
 package kr.co.fastcampus.eatgo.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +22,13 @@ public class Restaurant {
     @GeneratedValue
     private Long id;
     @Setter //name에 대한 setter 가 알아서 만들어 진다
+    @NotEmpty //비어있으면 안된다고 정의
     private String name;
+    @NotEmpty
     private String address;
 
-    @Transient //통과ll
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL) //Null이 아닐때만 json에 넣어줘라
     private List<MenuItem> menuItems;
 
     public String getInformation() {
