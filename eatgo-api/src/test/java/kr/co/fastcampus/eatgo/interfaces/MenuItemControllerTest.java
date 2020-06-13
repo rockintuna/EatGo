@@ -40,11 +40,8 @@ public class MenuItemControllerTest {
                         "    \"name\": \"Gukbob\"\n" +
                         "  }\n" +
                         "]")) //이런 array를 입력할꺼야
-                .andExpect(status().isOk()) //http status 200이야?
-                .andExpect(content().string(
-                        containsString("Kimchi"))); //입력한거에 Kimchi가 정상적으로 들어있나?
+                .andExpect(status().isOk()); //http status 200이야?
 
-        //List<MenuItem> menuItems = new ArrayList<MenuItem>();
         verify(menuItemServices).bulkUpdate(eq(1L), any()); //서비스에서 bulkUpdate()가 올바른 id(1L)로 호출되나?
     }
 }
