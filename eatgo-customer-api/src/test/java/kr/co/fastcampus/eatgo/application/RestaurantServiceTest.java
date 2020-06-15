@@ -141,9 +141,4 @@ public class RestaurantServiceTest {
         assertThat(restaurant.getAddress(), is("Busan"));
     }
 
-    @Test(expected = RestaurantNotFoundException.class)
-    public void updateRestaurantWithNotExist() {
-
-        restaurantService.updateRestaurant(404L,"GukBobZip","Busan");
-    }
 }

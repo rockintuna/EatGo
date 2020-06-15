@@ -7,18 +7,17 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -32,28 +31,18 @@ public class ReviewControllerTest {
     private ReviewService reviewService;
 
     @Test
-    public void createWithValidAttributes() throws Exception {
-        given(reviewService.addReview(any(),eq(1L))).willReturn(
-                Review.builder().id(1004L).build()
-        );
+    public void list() throws Exception {
+        List<Review> reviews = new ArrayList<Review>();
+        reviews.add(Review.builder().description("Cool").build());
 
-        mvc.perform(post("/restaurants/1/reviews")
-                .contentType(MediaType.APPLICATION_JSON) //json 타입이고
-                .content("{\"name\":\"jilee\",\"score\":3,\"description\":\"Mat-it-da\"}")) //이렇게 넣을거야
-                .andExpect(status().isCreated()) //잘 만들어지나?(status 201?)
-                .andExpect(header().string("location", "/restaurants/1/reviews/1004")); //header의 location 확인
+        given(reviewService.getReviews()).willReturn(reviews);
 
-        verify(reviewService).addReview(any(),eq(1L)); //addReview가 호출되니?
-    }
+        mvc.perform(MockMvcRequestBuilders.get("/reviews"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Cool")));
 
-    @Test
-    public void createWithInValidAttributes() throws Exception {
-        mvc.perform(post("/restaurants/1/reviews")
-                .contentType(MediaType.APPLICATION_JSON) //json 타입이고
-                .content("{}")) //이렇게 넣을거야
-                .andExpect(status().isBadRequest()); //status 404?
+        verify(reviewService).getReviews();
 
-        verify(reviewService,never()).addReview(any(),eq(1L)); //addReview가 호출되지 않니?
     }
 
 }

@@ -1,6 +1,7 @@
 package kr.co.fastcampus.eatgo.interfaces;
 
 import kr.co.fastcampus.eatgo.application.MenuItemService;
+import kr.co.fastcampus.eatgo.domain.MenuItem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +11,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +33,23 @@ public class MenuItemControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @Test
+    public void list() throws Exception {
+        List<MenuItem> menuitems = new ArrayList<MenuItem>();
+        menuitems.add(MenuItem.builder().name("Kimchi").build());
+
+        given(menuItemServices.getMenuItem(1L))
+                .willReturn(menuitems);
+
+        mvc.perform(get("/restaurants/1/menuitems"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Kimchi")));
+
+        verify(menuItemServices).getMenuItem(1L);
+    }
+
+
 
     @Test
     public void bulkUpdate() throws Exception {

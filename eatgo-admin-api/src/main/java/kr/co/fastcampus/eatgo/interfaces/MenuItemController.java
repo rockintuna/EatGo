@@ -14,10 +14,10 @@ public class MenuItemController {
     private MenuItemService menuItemServices;
 
     @GetMapping("/restaurants/{restaurantId}/menuitems")
-    public List<MenuItem> list() {
-
-        List<MenuItem> menuItems = null;
-        return menuItems;
+    public List<MenuItem> list(
+            @PathVariable("restaurantId") Long restaurantId
+    ) {
+        return menuItemServices.getMenuItem(restaurantId);
     }
 
     @PatchMapping("/restaurants/{restaurantId}/menuitems")

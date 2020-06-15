@@ -2,13 +2,20 @@ package kr.co.fastcampus.eatgo.application;
 
 import kr.co.fastcampus.eatgo.domain.Review;
 import kr.co.fastcampus.eatgo.domain.ReviewRepository;
+import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class ReviewServiceTest {
@@ -26,11 +33,16 @@ public class ReviewServiceTest {
     }
 
     @Test
-    public void addReview() {
-        Review review = Review.builder().name("jilee").score(3).description("Mat-it-da").build(); //Review 객체 생성
-        reviewService.addReview(review,1004L); //기능 실행할때
+    public void getReviews() {
 
-        verify(reviewRepository).save(any()); //save가 호출되니?
+        List<Review> mockReviews = new ArrayList<Review>();
+        mockReviews.add(Review.builder().description("Cool").build());
+        given(reviewRepository.findAll()).willReturn(mockReviews);
+
+        List<Review> reviews = reviewService.getReviews();
+
+        Review review = reviews.get(0);
+        assertThat(review.getDescription(), is("Cool"));
     }
 
 }

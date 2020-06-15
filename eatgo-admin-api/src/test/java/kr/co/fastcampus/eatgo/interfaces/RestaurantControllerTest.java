@@ -33,15 +33,12 @@ public class RestaurantControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    //Test하려는 대상은 RestaurantController 이므로 그 외의 대상을 가짜로 배치하려고 함
     @MockBean
     private RestaurantService restaurantService;
 
     @Test
     public void list() throws Exception {
 
-        //가짜 객체 생성, 가짜 처리
-        //실제 서비스, 저장소와는 무관하게 동작
         List<Restaurant> restaurants = new ArrayList<>();
         restaurants.add(Restaurant.builder()
                 .id(1004L)
@@ -67,16 +64,6 @@ public class RestaurantControllerTest {
                 .name("No Bob zip")
                 .address("Seoul")
                 .build();
-        restaurant.setMenuItems(Arrays.asList(MenuItem.builder()
-                .name("Kimchi")
-                .build()));
-
-        Review review = Review.builder()
-                .name("jilee")
-                .score(3)
-                .description("great")
-                .build();
-        restaurant.setReviews(Arrays.asList(review));
 
         given(restaurantService.getRestaurant(1004L)).willReturn(restaurant);
 
@@ -87,12 +74,6 @@ public class RestaurantControllerTest {
                 ))
                 .andExpect(content().string(
                         containsString("\"name\":\"No Bob zip\"")
-                ))
-                .andExpect(content().string(
-                        containsString("Kimchi")
-                ))
-                .andExpect(content().string(
-                        containsString("great")
                 ));
 
     }
@@ -119,12 +100,12 @@ public class RestaurantControllerTest {
         });
 
         mvc.perform(post("/restaurants")
-                .contentType(MediaType.APPLICATION_JSON) //JSON 타입임을 알려준다
-                .content("{\"name\":\"BeRyong\",\"address\":\"Busan\"}")) //JSON 타입으로 데이터 전달
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"BeRyong\",\"address\":\"Busan\"}"))
                 .andExpect(status().isCreated())
-                .andExpect(content().string("{}")); //비어있는지 확인
+                .andExpect(content().string("{}"));
 
-        verify(restaurantService).addRestaurant(any()); //뭘 넣든지 작동할 수 있도록, Mockito에서 제공
+        verify(restaurantService).addRestaurant(any());
     }
 
     @Test
