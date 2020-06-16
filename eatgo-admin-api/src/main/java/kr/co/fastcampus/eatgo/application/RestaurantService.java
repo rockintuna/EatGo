@@ -11,8 +11,6 @@ import java.util.List;
 public class RestaurantService {
 
     private RestaurantRepository restaurantRepository;
-    private MenuItemRepository menuItemRepository;
-    private ReviewRepository reviewRepository;
 
     @Autowired
     public RestaurantService(RestaurantRepository restaurantRepository) {

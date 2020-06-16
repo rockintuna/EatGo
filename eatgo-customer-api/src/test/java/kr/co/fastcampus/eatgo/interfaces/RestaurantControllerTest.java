@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -41,18 +40,18 @@ public class RestaurantControllerTest {
 
     @Test
     public void list() throws Exception {
-
-        //가짜 객체 생성, 가짜 처리
-        //실제 서비스, 저장소와는 무관하게 동작
         List<Restaurant> restaurants = new ArrayList<>();
         restaurants.add(Restaurant.builder()
                 .id(1004L)
+                .categoryId(1L)
                 .name("No Bob zip")
                 .address("Seoul")
                 .build());
-        given(restaurantService.getRestaurants()).willReturn(restaurants);
+        String region = "서울";
+        given(restaurantService.getRestaurants(region,1L))
+                .willReturn(restaurants);
 
-        mvc.perform(MockMvcRequestBuilders.get("/restaurants"))
+        mvc.perform(MockMvcRequestBuilders.get("/restaurants?region=서울&category=1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(
                         containsString("\"id\":1004")
@@ -61,6 +60,8 @@ public class RestaurantControllerTest {
                         containsString("\"name\":\"No Bob zip\"")
                 ));
     }
+
+
 
     @Test
     public void detailWithExist() throws Exception {

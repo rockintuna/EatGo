@@ -95,6 +95,7 @@ public class RestaurantServiceTest {
 
         Restaurant restaurant = Restaurant.builder()
                 .id(1L)
+                .categoryId(1L)
                 .name("BobZip")
                 .address("Seoul")
                 .build();

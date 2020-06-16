@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,21 @@ import java.util.List;
 @AllArgsConstructor //모든 속성을 사용하는 생성자
 @Builder //Builder 패턴을 사용
 public class Restaurant {
+
     @Id
     @Setter
     @GeneratedValue
     private Long id;
+
     @Setter //name에 대한 setter 가 알아서 만들어 진다
     @NotEmpty //비어있으면 안된다고 정의
     private String name;
+
     @NotEmpty
     private String address;
+
+    @NotNull
+    private Long categoryId;
 
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL) //Null이 아닐때만 json에 넣어줘라
