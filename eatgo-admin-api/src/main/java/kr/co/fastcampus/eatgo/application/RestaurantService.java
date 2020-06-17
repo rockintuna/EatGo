@@ -35,7 +35,7 @@ public class RestaurantService {
         return restaurantRepository.save(restaurant);
     }
 
-    @Transactional //트랜젝션 범위에서 처리되고 범위에서 처리가 벗어났을때 내용이 적용됨
+    @Transactional
     public Restaurant updateRestaurant(Long id, String name, String address) {
 
         Restaurant restaurant = restaurantRepository.findById(id)

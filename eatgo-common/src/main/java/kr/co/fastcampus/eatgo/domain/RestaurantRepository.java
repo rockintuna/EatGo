@@ -10,7 +10,7 @@ public interface RestaurantRepository
     List<Restaurant> findAll();
 
     List<Restaurant> findByAddressContainingAndCategoryId(
-            String 서울, long categoryId);
+            String region, long categoryId);
 
     Optional<Restaurant> findById(Long id);
 

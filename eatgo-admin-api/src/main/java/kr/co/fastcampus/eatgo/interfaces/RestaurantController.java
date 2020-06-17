@@ -33,7 +33,7 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants")
-    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource) //Valid: 검증할 것이라 정의
+    public ResponseEntity<?> create(@Valid @RequestBody Restaurant resource)
             throws URISyntaxException {
 
                 Restaurant restaurant = Restaurant.builder()
@@ -43,7 +43,7 @@ public class RestaurantController {
         restaurantService.addRestaurant(restaurant);
 
         URI location = new URI("/restaurants/"+restaurant.getId());
-        return ResponseEntity.created(location).body("{}"); //빈 내용
+        return ResponseEntity.created(location).body("{}");
     }
 
     @PatchMapping("/restaurants/{id}")
