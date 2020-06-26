@@ -46,11 +46,4 @@ public class User {
         level = 0L;
     }
 
-    //@JsonIgnore //requestedbody에 password가 없는경우 무시
-    public String getAccessToken() {
-        if (password == null) {
-            return "";
-        }
-        return password.substring(0, 10);
-    }
 }

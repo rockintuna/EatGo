@@ -19,18 +19,4 @@ public class UserTests {
         assertThat(user.isAdmin(), is(true));
     }
 
-    @Test
-    public void getAccessTokenWithPassword() {
-        User user = User.builder().password("ACCESSTOKEN").build();
-
-        assertThat(user.getAccessToken(), is("ACCESSTOKE"));
-    }
-
-    @Test
-    public void getAccessTokenWithoutPassword() {
-        User user = new User();
-
-        assertThat(user.getAccessToken(), is(""));
-    }
-
 }
