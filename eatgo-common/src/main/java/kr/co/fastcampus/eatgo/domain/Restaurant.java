@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter //모든 속성들에 대한 getter 가 알아서 만들어 진다
-@NoArgsConstructor //디폴트 생성자
-@AllArgsConstructor //모든 속성을 사용하는 생성자
-@Builder //Builder 패턴을 사용
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Restaurant {
 
     @Id
@@ -24,8 +24,8 @@ public class Restaurant {
     @GeneratedValue
     private Long id;
 
-    @Setter //name에 대한 setter 가 알아서 만들어 진다
-    @NotEmpty //비어있으면 안된다고 정의
+    @Setter
+    @NotEmpty
     private String name;
 
     @NotEmpty
