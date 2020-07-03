@@ -1,10 +1,10 @@
 package kr.co.fastcampus.eatgo.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
 
 import java.security.Key;
 
@@ -17,10 +17,16 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String createToken(long userId, String name) {
-        String token = Jwts.builder()
-                .claim("userId",userId)
-                .claim("name",name)
+    public String createToken(long userId, String name, Long restaurantId) {
+        JwtBuilder builder = Jwts.builder()
+                .claim("userId", userId)
+                .claim("name", name);
+
+        if (restaurantId != null) {
+            builder.claim("restaurantId",restaurantId);
+        }
+
+        String token = builder
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 

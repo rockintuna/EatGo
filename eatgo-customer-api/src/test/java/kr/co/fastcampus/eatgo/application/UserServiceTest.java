@@ -64,44 +64,4 @@ public class UserServiceTest {
         verify(userRepository,never()).save(any());
     }
 
-    @Test
-    public void authenticateWithValidAttributes() {
-        String email = "rockintuna@naver.com";
-        String password = "test";
-        User mockUser = User.builder().email(email).build();
-
-        given(userRepository.findByEmail(email))
-                .willReturn(Optional.of(mockUser));
-        given(passwordEncoder.matches(eq(password),any())).willReturn(true);
-
-        User user = userService.authenticate(email,password);
-
-        assertThat(user.getEmail(), is(email));
-
-    }
-
-    @Test(expected = EmailNotExistedException.class)
-    public void authenticateWithNotExistedEmail() {
-        String email = "notexisted@example.com";
-        String password = "test";
-
-        given(userRepository.findByEmail(email))
-                .willReturn(Optional.empty());
-        userService.authenticate(email,password);
-    }
-
-    @Test(expected = PasswordWrongException.class)
-    public void authenticateWithWrongPassword() {
-        String email = "rockintuna@naver.com";
-        String password = "x";
-
-        User mockUser = User.builder().email(email).build();
-
-        given(userRepository.findByEmail(email))
-                .willReturn(Optional.of(mockUser));
-        given(passwordEncoder.matches(eq(password),any())).willReturn(false);
-
-        userService.authenticate(email,password);
-
-    }
 }

@@ -32,27 +32,30 @@ public class ReviewControllerTest {
 
     @Test
     public void createWithValidAttributes() throws Exception {
-        given(reviewService.addReview(any(),eq(1L))).willReturn(
+        String token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOjEwMDQsIm5hbWUiOiLsnbTsoJXsnbgifQ.wKrAIT-cOCfQwBO_8UkhK_IOy4tl8uuIeBS4nppu_Vw";
+
+        given(reviewService.addReview(1L,"이정인",3,"Mat-it-da")).willReturn(
                 Review.builder().id(1004L).build()
         );
 
         mvc.perform(post("/restaurants/1/reviews")
-                .contentType(MediaType.APPLICATION_JSON) //json 타입이고
-                .content("{\"name\":\"jilee\",\"score\":3,\"description\":\"Mat-it-da\"}")) //이렇게 넣을거야
-                .andExpect(status().isCreated()) //잘 만들어지나?(status 201?)
-                .andExpect(header().string("location", "/restaurants/1/reviews/1004")); //header의 location 확인
+                .header("Authorization","Bearer "+token)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"score\":3,\"description\":\"Mat-it-da\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", "/restaurants/1/reviews/1004"));
 
-        verify(reviewService).addReview(any(),eq(1L)); //addReview가 호출되니?
+        verify(reviewService).addReview(1L,"이정인",3,"Mat-it-da");
     }
 
     @Test
     public void createWithInValidAttributes() throws Exception {
         mvc.perform(post("/restaurants/1/reviews")
-                .contentType(MediaType.APPLICATION_JSON) //json 타입이고
-                .content("{}")) //이렇게 넣을거야
-                .andExpect(status().isBadRequest()); //status 404?
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+                .andExpect(status().isBadRequest());
 
-        verify(reviewService,never()).addReview(any(),eq(1L)); //addReview가 호출되지 않니?
+        verify(reviewService,never()).addReview(eq(1L),any(),any(),any());
     }
 
 }

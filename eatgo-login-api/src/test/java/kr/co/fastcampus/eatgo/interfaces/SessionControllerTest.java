@@ -40,10 +40,40 @@ public class SessionControllerTest {
         String name = "이정인";
         Long id = 1004L;
 
-        User mockUser = User.builder().name(name).id(id).build();
+        User mockUser = User.builder().name(name).id(id).level(1L).build();
 
         given(userService.authenticate(email,password)).willReturn(mockUser);
-        given(jwtUtil.createToken(id,name)).willReturn("header.payload.signature");
+        given(jwtUtil.createToken(id,name, null)).willReturn("header.payload.signature");
+
+        mvc.perform(post("/session")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\":\"rockintuna@naver.com\",\"password\":\"test\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", "/session"))
+                .andExpect(content().string(
+                        containsString("{\"accessToken\":\"header.payload.signature\"}")
+                ));
+
+        verify(userService).authenticate(email,password);
+    }
+
+    @Test
+    public void createRestaurantOwner() throws Exception {
+        String email = "rockintuna@naver.com";
+        String password = "test";
+        String name = "이정인";
+        Long id = 1004L;
+
+        User mockUser = User.builder()
+                .name(name)
+                .id(id)
+                .level(50L)
+                .restaurantId(369L)
+                .build();
+
+        given(userService.authenticate(email,password)).willReturn(mockUser);
+        given(jwtUtil.createToken(id,name, 369L))
+                .willReturn("header.payload.signature");
 
         mvc.perform(post("/session")
                 .contentType(MediaType.APPLICATION_JSON)

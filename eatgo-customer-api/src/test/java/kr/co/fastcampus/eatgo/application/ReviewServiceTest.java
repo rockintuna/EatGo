@@ -27,7 +27,7 @@ public class ReviewServiceTest {
     @Test
     public void addReview() {
         Review review = Review.builder().name("jilee").score(3).description("Mat-it-da").build(); //Review 객체 생성
-        reviewService.addReview(review,1004L); //기능 실행할때
+        reviewService.addReview(1004L, "jilee", 3, "Mat-it-da"); //기능 실행할때
 
         verify(reviewRepository).save(any()); //save가 호출되니?
     }
