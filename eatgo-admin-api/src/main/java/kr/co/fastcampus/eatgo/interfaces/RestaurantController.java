@@ -37,6 +37,7 @@ public class RestaurantController {
             throws URISyntaxException {
 
                 Restaurant restaurant = Restaurant.builder()
+                .categoryId(resource.getCategoryId())
                 .name(resource.getName())
                 .address(resource.getAddress())
                 .build();

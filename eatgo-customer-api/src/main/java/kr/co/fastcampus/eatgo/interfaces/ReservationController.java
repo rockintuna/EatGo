@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@CrossOrigin
 @RestController
 public class ReservationController {
 

@@ -111,6 +111,8 @@ public class RestaurantControllerTest {
         verify(restaurantService).addRestaurant(any());
     }
 
+
+
     @Test
     public void createWithInvalidData() throws Exception {
         mvc.perform(post("/restaurants")
